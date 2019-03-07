@@ -146,5 +146,4 @@ for i in range(len(raw_data)):
 #apriori algorithm
 support = 2
 Candidate_set = find_association_rules(raw_data,support)
-#print(Candidate_set[len(Candidate_set)-1])
 print(Candidate_set)
