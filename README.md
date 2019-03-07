@@ -1,2 +1,4 @@
 # Data-Analytics-with-python
-small data mining and machine learning program for data analytics 
+Small data mining and machine learning program for data analytics
+
+1.Apriori with improvments
