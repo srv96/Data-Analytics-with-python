@@ -135,6 +135,7 @@ def find_association_rules(raw_data,support):
 
 #importing data
 file = open("dataset.txt",'r')
+print(file)
 raw_data =file.read()
 file.close()
 
