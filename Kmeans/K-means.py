@@ -6,7 +6,7 @@ import numpy as np
 import itertools
 
 def distance(p1,p2):
-	return np.sqrt(np.sum(np.square(p1-p2),axis = 1))
+	return np.sqrt(np.sum(np.square(p1-p2),axis = 0))
 
 def factors(n):    
     return set(reduce(list.__add__, ([i, n//i] for i in range(1, int(n**0.5) + 1) if n % i == 0)))
