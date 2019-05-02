@@ -105,7 +105,7 @@ centers = 3
 n_features = 2
 ε = 0.25
 minPts = 10
-X,_= make_blobs(n_samples=n_samples, centers=centers, n_features=n_features,random_state=0,cluster_std = 0.2)
+X,_= make_blobs(n_samples=n_samples, centers=centers, n_features=n_features,random_state=0,cluster_std = 0.2	)
 container = make_datapoints(X)
 cluster_dbscan(container)
 plot_cluster(container)
