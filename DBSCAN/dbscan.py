@@ -59,7 +59,7 @@ def check_border(p_point,container,ε,minPts):
 					return "border"
 		return "noise"
 
-def cluster_dbscan(container):
+def cluster_dbscan(container,ε,minPts):
 	for point in container:
 		point.set_status(check_core(point,container,ε,minPts))
 	for point in container:
@@ -105,8 +105,8 @@ centers = 3
 n_features = 2
 ε = 0.25
 minPts = 10
-X,_= make_blobs(n_samples=n_samples, centers=centers, n_features=n_features,random_state=0,cluster_std = 0.2	)
+X,_= make_blobs(n_samples=n_samples, centers=centers, n_features=n_features,random_state=0,cluster_std = 0.2)
 container = make_datapoints(X)
-cluster_dbscan(container)
+cluster_dbscan(container,ε,minPts)
 plot_cluster(container)
 

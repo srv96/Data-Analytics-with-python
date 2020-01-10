@@ -38,6 +38,7 @@ def process_data(dataset,support):
 		similar.sort()
 		pattern.append(similar)
 	pattern = list(itertools.chain.from_iterable(pattern))
+	print(pattern)
 	filter_data = []
 	for tup in pro_data:
 		filter_tup = []

@@ -26,12 +26,14 @@ def plot_cluster(result):
 		for cluster in result:
 			plt.scatter(cluster[:,0],cluster[:,1])
 		plt.show()
-	if n_features == 3 :
+		return
+	elif n_features == 3 :
 		fig = plt.figure()
 		ax = fig.add_subplot(111, projection='3d')
 		for cluster in result:
 			ax.scatter(cluster[:,0],cluster[:,1],cluster[:,2])
 		plt.show()
+		return
 	else:
 		row,col = get_middle((n_features * (n_features - 1)) / 2)
 		fig, ax = plt.subplots(nrows=int(row), ncols=int(col))
@@ -43,12 +45,13 @@ def plot_cluster(result):
 					ax[i][j].scatter(result[k][:,pairs[inc][0]],result[k][:,pairs[inc][1]],s=0.2)
 				inc = inc + 1
 		plt.show()
+		return
 
 n_samples = 1000
 centers = 3
-n_features = 4
-epoch = 10
-X,y = make_blobs(n_samples=n_samples, centers=centers, n_features=n_features,random_state=0,cluster_std = 0.5)
+n_features = 2
+epoch = 15
+X,_= make_blobs(n_samples=n_samples, centers=centers, n_features=n_features,random_state=0,cluster_std = 0.5)
 d_points = np.array(X)
 C = d_points[:centers]
 d_points = d_points[centers:]
@@ -82,13 +85,12 @@ for e in range(epoch):
 	for i in range(d_points.shape[0]):
 		temp = dists[:,i].ravel()
 		classify[i] = np.where(temp == np.amin(temp))[0]
-
 	n_c = np.zeros((centers,n_features))
 	classify =classify.astype(int)
 	count = np.bincount(classify)
 	count= count.reshape(len(count),1)
 	for i in range(d_points.shape[0]):
-		n_c[int(classify[i]),:] = n_c[int(classify[i]),:] + d_points[i,:]
+		n_c[classify[i],:] = n_c[classify[i],:] + d_points[i,:]
 	n_c = n_c / count
 
 classify = np.zeros(d_points.shape[0])
