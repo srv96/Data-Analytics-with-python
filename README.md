@@ -5,3 +5,4 @@ Small data mining and machine learning program for data analytics
 2. FPGrowth algorithm for fp tree making 
 3. Kmeans clustering with n dimensional dataset with visualization with matplotlib
 4. DBSCAN clustering
+5. Linear Regression with Higher order
