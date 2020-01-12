@@ -1,113 +1,117 @@
-from sklearn.datasets.samples_generator import make_blobs
+from sklearn.datasets import make_blobs
 from mpl_toolkits.mplot3d import Axes3D
 from functools import reduce
 import matplotlib.pyplot as plt
 import numpy as np
 import itertools
 
-def distance(p1,p2):
-	return np.sqrt(np.sum(np.square(p1-p2),axis = 0))
+class Kmeans:
+	def __init__(self):
+		pass
 
-def factors(n):    
-    return set(reduce(list.__add__, ([i, n//i] for i in range(1, int(n**0.5) + 1) if n % i == 0)))
+	def distance(self,p1,p2):
+		return np.sqrt(np.sum(np.square(p1-p2),axis = 0))
 
-def get_middle(n):
-	facts = list(factors(n))
-	if np.sqrt(n) - int(np.sqrt(n)) == 0:
-		return [int(np.sqrt(n)),int(np.sqrt(n))]
-	else:
-		facts.sort()
-		return [facts[int(len(facts)/2)-1],facts[int(len(facts)/2)]]
-	return facts
+	def factors(self,n):
+		return set(reduce(list.__add__, ([i, n//i] for i in range(1, int(n**0.5) + 1) if n % i == 0)))
 
-def plot_cluster(result):
-	n_features = len(result[0][0])
-	if n_features == 2 : 
-		for cluster in result:
-			plt.scatter(cluster[:,0],cluster[:,1])
-		plt.show()
-		return
-	elif n_features == 3 :
-		fig = plt.figure()
-		ax = fig.add_subplot(111, projection='3d')
-		for cluster in result:
-			ax.scatter(cluster[:,0],cluster[:,1],cluster[:,2])
-		plt.show()
-		return
-	else:
-		row,col = get_middle((n_features * (n_features - 1)) / 2)
-		fig, ax = plt.subplots(nrows=int(row), ncols=int(col))
-		pairs = list(itertools.combinations(range(n_features),2))
-		inc = 0
-		for i in range(len(ax)):
-			for j in range(len(ax[0])):
-				for k in range(len(result)):
-					ax[i][j].scatter(result[k][:,pairs[inc][0]],result[k][:,pairs[inc][1]],s=0.2)
-				inc = inc + 1
-		plt.show()
-		return
+	def get_middle(self,n):
+		facts = list(self.factors(n))
+		if np.sqrt(n) - int(np.sqrt(n)) == 0:
+			return [int(np.sqrt(n)),int(np.sqrt(n))]
+		else:
+			facts.sort()
+			return [facts[int(len(facts)/2)-1],facts[int(len(facts)/2)]]
+		return facts
 
-n_samples = 1000
-centers = 3
-n_features = 2
-epoch = 15
-X,_= make_blobs(n_samples=n_samples, centers=centers, n_features=n_features,random_state=0,cluster_std = 0.5)
-d_points = np.array(X)
-C = d_points[:centers]
-d_points = d_points[centers:]
+	def visualize(self):
+		n_features = len(self.prediction[0][0])
+		if n_features == 2 : 
+			for cluster in self.prediction:
+				plt.scatter(cluster[:,0],cluster[:,1])
+			plt.show()
+			return
+		elif n_features == 3 :
+			fig = plt.figure()
+			ax = fig.add_subplot(111, projection='3d')
+			for cluster in self.prediction:
+				ax.scatter(cluster[:,0],cluster[:,1],cluster[:,2])
+			plt.show()
+			return
+		else:
+			row,col = self.get_middle((n_features * (n_features - 1)) / 2)
+			fig, ax = plt.subplots(nrows=int(row), ncols=int(col))
+			pairs = list(itertools.combinations(range(n_features),2))
+			inc = 0
+			for i in range(len(ax)):
+				for j in range(len(ax[0])):
+					for k in range(len(self.prediction)):
+						ax[i][j].scatter(prediction[k][:,pairs[inc][0]],self.prediction[k][:,pairs[inc][1]],s=0.2)
+					inc = inc + 1
+			plt.show()
+			return
 
-dists = np.zeros((centers,d_points.shape[0]))
-for i,c in enumerate(C):
-	for j,points in enumerate(d_points):
-		dists[i][j] = distance(c,points)
+	def set_center(self):
+		self.dists = np.zeros((self.n_clusters,self.X.shape[0]))
+		for i,c in enumerate(self.C):
+			for j,points in enumerate(self.X):
+				self.dists[i][j] = self.distance(c,points)
+		classify = np.zeros(self.X.shape[0])
+		for i in range(self.X.shape[0]):
+			temp = self.dists[:,i].ravel()
+			classify[i] = np.where(temp == np.amin(temp))[0]
+		self.n_c = np.zeros((self.n_clusters,self.X.shape[1]))
+		classify =classify.astype(int)
+		count = np.bincount(classify)
+		count= count.reshape(len(count),1)
+		for i in range(self.X.shape[0]):
+			self.n_c[classify[i],:] = self.n_c[int(classify[i]),:] + self.X[i,:]
+		self.n_c = self.n_c / count
 
-classify = np.zeros(d_points.shape[0])
-for i in range(d_points.shape[0]):
-	temp = dists[:,i].ravel()
-	classify[i] = np.where(temp == np.amin(temp))[0]
-n_c = np.zeros((centers,n_features))
-classify =classify.astype(int)
-count = np.bincount(classify)
-count= count.reshape(len(count),1)
-for i in range(d_points.shape[0]):
-	n_c[int(classify[i]),:] = n_c[int(classify[i]),:] + d_points[i,:]
-n_c = n_c / count
-d_points = np.append(d_points,C,axis = 0)
+	def classify(self,X,n_clusters,epoch):
+		self.X = X
+		self.n_clusters = n_clusters
+		#updation should be done in choosing the center
+		self.C = self.X[:self.n_clusters]
+		self.X = self.X[self.n_clusters:]
+		self.set_center()
+		self.X = np.append(self.X,self.C,axis = 0)
+		for e in range(epoch):
+			self.set_center()
+		classify = np.zeros(self.X.shape[0])
+		for i in range(self.X.shape[0]):
+			temp = self.dists[:,i].ravel()
+			classify[i] = np.where(temp == np.amin(temp))[0]
+		classify = classify.astype(int)
+		prediction = []
+		for i in range(self.n_clusters):
+			prediction.append([])
+		for i in range(self.X.shape[0]):
+			prediction[classify[i]].append(list(self.X[i]))
+		for i in range(self.n_clusters):
+			prediction[i] = np.array(prediction[i])
+		self.prediction = prediction
+		return prediction
 
-for e in range(epoch):
-	C = n_c
-	dists = np.zeros((centers,d_points.shape[0]))
-	for i,c in enumerate(C):
-		for j,points in enumerate(d_points):
-			dists[i][j] = distance(c,points)
+def get_data_from_file(filename):
+    datafile = open(filename)
+    data = []
+    for row in datafile:
+        tup = []
+        for ele in row.split(','):
+            tup.append(float(ele))
+        data.append(np.array(tup))
+    return np.array(data)
 
-	classify = np.zeros(d_points.shape[0])
-	for i in range(d_points.shape[0]):
-		temp = dists[:,i].ravel()
-		classify[i] = np.where(temp == np.amin(temp))[0]
-	n_c = np.zeros((centers,n_features))
-	classify =classify.astype(int)
-	count = np.bincount(classify)
-	count= count.reshape(len(count),1)
-	for i in range(d_points.shape[0]):
-		n_c[classify[i],:] = n_c[classify[i],:] + d_points[i,:]
-	n_c = n_c / count
+#feathing data from the file
+filename = 'test_dataset.txt'
+X = get_data_from_file(filename = filename)
 
-classify = np.zeros(d_points.shape[0])
-for i in range(d_points.shape[0]):
-	temp = dists[:,i].ravel()
-	classify[i] = np.where(temp == np.amin(temp))[0]
-classify = classify.astype(int)
+#data classification
+n_clusters = 3
+epoch = 10
+clf = Kmeans()
+clf.classify(X,n_clusters,epoch)
 
-result = []
-for i in range(centers):
-	result.append([])
-for i in range(d_points.shape[0]):
-	result[classify[i]].append(list(d_points[i]))
-for i in range(centers):
-	result[i] = np.array(result[i])
-
-
-result = np.array(result)
-
-plot_cluster(result)
+#data visualization
+clf.visualize()
