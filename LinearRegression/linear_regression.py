@@ -68,7 +68,7 @@ X,y = normalize(X,y)
 
 #fitting the data
 α = 0.1
-feature_level = 10
+feature_level = 5
 epoch = 10000
 clf = LinearRegression()
 θ,costs = clf.fit(X,y,α,feature_level,epoch)
