@@ -2,7 +2,7 @@
 Small data mining and machine learning program for data analytics
 
 1. Apriori with improvments
-2. FPGrowth algorithm for fp tree making 
-3. Kmeans clustering with n dimensional dataset with visualization with matplotlib
-4. DBSCAN clustering
+2. DBSCAN clustering
+3. FPGrowth algorithm for fp tree making 
+4. Kmeans clustering with n dimensional dataset with visualization with matplotlib
 5. Linear Regression with Higher order
