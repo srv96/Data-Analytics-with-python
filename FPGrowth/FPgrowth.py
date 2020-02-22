@@ -138,10 +138,10 @@ def load_data(filename) :
 	return pro_data
 
 
-support = 30
+support = 20
 filename = 'result.png'
 raw_data = load_data('dataset.txt')
 refl = FPGrowth()
 refl.make_tree(raw_data,support)
-refl.visualize()
+#refl.visualize()
 refl.save_to_dir(filename = filename)

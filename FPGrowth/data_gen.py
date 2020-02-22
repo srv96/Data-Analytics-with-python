@@ -1,8 +1,8 @@
 import numpy as np
 
 #create dataset and store it
-max_transaction = 1000
-max_items = 20
+max_transaction = 500
+max_items = 500
 data = []
 n1 = int(np.random.rand()*max_transaction)
 for i in range(n1):
