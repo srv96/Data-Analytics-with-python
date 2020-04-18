@@ -97,7 +97,7 @@ def get_data_from_file(filename):
     datafile = open(filename)
     data = []
     for row in datafile:
-        tup = []
+       	tup = []
         for ele in row.split(','):
             tup.append(float(ele))
         data.append(np.array(tup))
@@ -106,10 +106,14 @@ def get_data_from_file(filename):
 #feathing data from the file
 filename = 'test_dataset.txt'
 X = get_data_from_file(filename = filename)
+# np.random.shuffle(X)
+# for cluster in X:
+# 	plt.scatter(X[:,0],X[:,1])
+# plt.show()
 
 #data classification
 n_clusters = 3
-epoch = 10
+epoch = 100
 clf = Kmeans()
 clf.classify(X,n_clusters,epoch)
 
