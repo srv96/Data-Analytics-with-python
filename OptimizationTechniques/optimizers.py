@@ -19,10 +19,7 @@ class AdaDelta(Optimizer):
 		self.ε = ε
 		self.α = α
 		self.decay = decay
-		self.EΔ2 = 0
-		self.Δx = 0
-		self.EΔx2 = 0
-		self.iterations = 0
+		self.EΔ2, self.Δx, self.EΔx2, self.iterations = 0, 0, 0, 0
 		self.config = locals()
 		del self.config['self']
 
