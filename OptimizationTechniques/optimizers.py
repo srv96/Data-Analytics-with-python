@@ -30,7 +30,10 @@ class AdaDelta(Optimizer):
 		θ = θ - self.α * self.Δx
 		self.α = self.α * (1 / (1 + self.decay * self.iterations))
 		self.iterations = self.iterations + 1
-		return θ		
+		return θ
+		
+	def get_config(self):
+		return self.config	
 
 class Adagrade(Optimizer):
 
