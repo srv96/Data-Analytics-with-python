@@ -40,7 +40,7 @@ class PCA:
 
 
 
-def normalize(X, centering=True, scaling=True):
+def StandardScalar(X, centering=True, scaling=True):
     X = X.astype(float)
 
     if centering:
@@ -53,7 +53,7 @@ def normalize(X, centering=True, scaling=True):
 #data preprocess
 df = pd.read_csv('./datasets/test_data.csv')
 X = np.array(df)
-X = normalize(X)
+X = StandardScalar(X)
 
 #pricipal component analysis
 n_component = 2
