@@ -9,3 +9,4 @@ Small data mining and machine learning program for data analytics
 6. Cost function minimization with different optimazation techinique
 7. Principal Component Analysis
 8. Maximal-Margin Classifier with Support Vector Machine
+9. Smoothing techiniques for time series data
