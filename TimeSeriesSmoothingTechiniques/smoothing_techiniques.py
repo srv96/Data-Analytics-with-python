@@ -15,7 +15,7 @@ def exponential_smoothing(X,α):
 	S = np.zeros(X.shape[0])
 	S[0] = X[0]
 	for t in range(1,X.shape[0]):
-		S[t] = α * X[t-1] + (1- α) * X[t]
+		S[t] = α * X[t-1] + (1- α) * S[t-1]
 	return S
 
 def double_exponential_smoothing(X,α,β):
