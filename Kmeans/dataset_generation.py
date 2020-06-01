@@ -7,10 +7,10 @@ def generate_data(n_samples,centers,n_features,random_state,cluster_std,dataset_
 	np.savetxt("test_dataset.txt",X, delimiter=",")
 
 n_samples = 400
-centers = 3
+centers = 10
 n_features = 2
 random_state = 1
-cluster_std = 1
+cluster_std = 0.25
 dataset_name = './test_dataset.txt'
 
 generate_data(n_samples,centers,n_features,random_state,cluster_std,dataset_name)

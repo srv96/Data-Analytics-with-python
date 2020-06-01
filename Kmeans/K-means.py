@@ -6,14 +6,25 @@ import numpy as np
 import itertools
 
 class Kmeans:
-	def __init__(self):
-		pass
+	def __init__(self,init = None):
+		self.init = init
 
 	def distance(self,p1,p2):
 		return np.sqrt(np.sum(np.square(p1-p2),axis = 0))
 
 	def factors(self,n):
 		return set(reduce(list.__add__, ([i, n//i] for i in range(1, int(n**0.5) + 1) if n % i == 0)))
+
+	def initialize_centroids(self):
+		centroids = np.zeros([self.n_clusters,self.X.shape[1]])
+		centroids[0] = self.X[np.random.randint(self.X.shape[0]),:]
+		for i in range(self.n_clusters):
+			all_distances = np.array([])
+			for data_point in self.X:
+				near_centroids_distance = np.linalg.norm(data_point-centroids,axis=1).min()
+				all_distances = np.append(all_distances,near_centroids_distance)
+			centroids[i]= self.X[np.argmax(all_distances),:]
+		return centroids
 
 	def get_middle(self,n):
 		facts = list(self.factors(n))
@@ -71,11 +82,16 @@ class Kmeans:
 	def classify(self,X,n_clusters,epoch):
 		self.X = X
 		self.n_clusters = n_clusters
-		#updation should be done in choosing the center
-		self.C = self.X[:self.n_clusters]
-		self.X = self.X[self.n_clusters:]
-		self.set_center()
-		self.X = np.append(self.X,self.C,axis = 0)
+
+		if self.init == "kmeans++":
+			self.C = self.initialize_centroids()
+			self.set_center()
+		else:
+			self.C = self.X[:self.n_clusters]
+			self.X = self.X[self.n_clusters:]
+			self.set_center()
+			self.X = np.append(self.X,self.C,axis = 0)
+
 		for e in range(epoch):
 			self.set_center()
 		classify = np.zeros(self.X.shape[0])
@@ -106,15 +122,11 @@ def get_data_from_file(filename):
 #feathing data from the file
 filename = 'test_dataset.txt'
 X = get_data_from_file(filename = filename)
-# np.random.shuffle(X)
-# for cluster in X:
-# 	plt.scatter(X[:,0],X[:,1])
-# plt.show()
 
 #data classification
-n_clusters = 3
-epoch = 100
-clf = Kmeans()
+n_clusters = 8
+epoch = 10
+clf = Kmeans(init="kmeans++")
 clf.classify(X,n_clusters,epoch)
 
 #data visualization
