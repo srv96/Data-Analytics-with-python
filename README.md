@@ -1,3 +1,5 @@
+![Python 3.6](https://img.shields.io/badge/Python-3.6-brightgreen.svg)
+
 # Data-Analytics-with-python
 Small data mining and machine learning program for data analytics
 
